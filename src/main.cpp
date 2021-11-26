@@ -2,18 +2,24 @@
 #include <iostream>
 #include <sys/ioctl.h>
 #include <unistd.h>
+#include <strings.h>
 
-void fill_win(const int & h, const int & w, const char & ch)
+void print_screen(const char *screen, const int &screen_size)
 {
-    char br = '\n';
-    for (int i = 0; i < h; i++)
-    {
-        for (int i = 0; i < w; i++)
-        {
-            write(0, &ch, 1);
-        }
-            write(0, &br, 1);
-    }
+    write(0, screen, screen_size);
+}
+
+void fill_screen(char *screen, const int & screen_size)
+{
+    char ch = ' ';
+    for (int i = 0; i < screen_size; i++)
+        screen[i] = ch;
+    screen[screen_size] = '\0';
+}
+
+void put_pixel(const vec2 &px, char *screen)
+{
+    screen[(int)px.x + ((int)px.y / 13)] = '=';
 }
 
 int main()
@@ -23,25 +29,25 @@ int main()
 
     int h = win.ws_row;
     int w = win.ws_col;
+    int screen_size = h * w;
+    char screen[screen_size + 1];
+    bzero(screen, screen_size + 1);
 
-    char *screen = (char*)malloc(sizeof(char) * h * w +1);
+    vec2 px = vec2(h/2, w/2);
+    std::cout << px.x << " " << px.y; //todo del
 
-
-    char ch = '*';
+    fill_screen(screen, screen_size);
+    put_pixel(px, screen);
+    // for (;;)
     int frames = 60;
     for (int i = 0; i < frames; i++)
     {
-        fill_win(h, w, ch);
+        print_screen(screen, screen_size);
+        // sleep(1);
     }
-    for (int i = 0; i < (h * w); i++)
-    {
-	    screen[i] = '@';
-    }
-    screen[h + w] = '\0';
 
-    
-    std::cout << screen << "========== end ==========" << std::endl
-              << "lines\tY: " << h << std::endl 
+    std::cout << sizeof(screen) << "========== end ==========" << std::endl
+              << "lines\tY: " << h << std::endl
               << "columns\tX: " << w << std::endl
               << std::endl;
     return 0;

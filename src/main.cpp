@@ -24,14 +24,23 @@ int main()
     int h = win.ws_row;
     int w = win.ws_col;
 
+    char *screen = (char*)malloc(sizeof(char) * h * w +1);
+
+
     char ch = '*';
     int frames = 60;
     for (int i = 0; i < frames; i++)
     {
         fill_win(h, w, ch);
     }
+    for (int i = 0; i < (h * w); i++)
+    {
+	    screen[i] = '@';
+    }
+    screen[h + w] = '\0';
+
     
-    std::cout << "========== end ==========" << std::endl
+    std::cout << screen << "========== end ==========" << std::endl
               << "lines\tY: " << h << std::endl 
               << "columns\tX: " << w << std::endl
               << std::endl;

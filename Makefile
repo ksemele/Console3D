@@ -1,6 +1,6 @@
 NAME		= 3dconsole
 
-CPP			= clang++
+CPP			= g++
 CFLAGS		= -Wall -Wextra -Werror
 
 INCLUDES	= -I$(INC_DIR)
